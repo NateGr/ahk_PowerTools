@@ -2246,10 +2246,10 @@ Teams_MeetingShare(ShareMode := 2){
     ; ShareMode = 1 : share
     ; ShareMode = 2: toggle share
 
-    If GetKeyState("Ctrl") {
-        Teamsy_Help("sh")
-        return
-    }
+;    If GetKeyState("Ctrl") {
+;        Teamsy_Help("sh")
+;        return
+;    }
     WinId := Teams_GetMeetingWindow()
     If !WinId ; empty
         return
@@ -2292,12 +2292,13 @@ Teams_MeetingShare(ShareMode := 2){
         El.Click()
     }
 
+    ; SendInput {Tab}{Tab}{Tab}{Enter} ; Select first screen - New Share design requires 3 {Tab}
     SendInput {Tab}{Tab}{Tab}{Enter} ; Select first screen - New Share design requires 3 {Tab}
     
     ; Move Meeting Window to secondary screen
     SysGet, MonitorCount, MonitorCount	; or try:    SysGet, var, 80
     If (MonitorCount > 1) {
-       ; Wait for Window to be minimized
+    ;    Wait for Window to be minimized
        Sleep 500
         ; Move to secondary monitor (activates window)
         Monitor_MoveToSecondary(WinId,false)   ; bug: unshare on winactivate
@@ -2799,7 +2800,8 @@ UIA := UIA_Interface()
 TeamsEl := UIA.ElementFromHandle(WinId)
 
 ;El :=  TeamsEl.FindFirstByNameAndType("Turn camera on", "button",,1)
-El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
+El :=  TeamsEl.FindFirstByName("Camera",,1) ; menu item on meeting window; button on Call in progress
+;El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
 If El {
     If (State = 0) {
         Tooltip("Teams Camera is already off.")
@@ -2812,7 +2814,8 @@ If El {
     }
 }
 ;El :=  TeamsEl.FindFirstByNameAndType("Turn camera off", "button",,1)
-El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
+;El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
+El :=  TeamsEl.FindFirstByName("Camera",,1)
 If El {
     If (State = 1) {
         Tooltip("Teams Camera is already on.")
@@ -3036,6 +3039,32 @@ IcoFile := "HBITMAP:*" . Create_mr_%Reaction%_ico()
 TrayIcon(IcoFile,2000)
      
 } ; eofun
+Teams_MeetingReactionLike() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Like")
+} ; eofun    
+Teams_MeetingReactionApplause() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Applause")
+} ; eofun    
+Teams_MeetingReactionLove() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Love")
+} ; eofun    
+Teams_MeetingReactionLaugh() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Laugh")
+} ; eofun    
+Teams_MeetingReactionSurprised() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Surprised")
+} ; eofun    
+
 
 ; -------------------------------------------------------------------------------------------------------------------
 
