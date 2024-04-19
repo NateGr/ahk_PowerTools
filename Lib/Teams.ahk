@@ -2795,38 +2795,48 @@ If !WinId ; empty
     return
 
 WinGet, curWinId, ID, A
+; Seems all this has broken since Microsoft added the Drop down to the button
+;Simplyfying and just activating the window and sending the keystrokes and then reactivate the old window.
+WinActivate, ahk_id %WinId%
+Sleep, 100
+SendInput ^+o ;toggle video ctrl-shift-o
+Sleep, 100
 
-UIA := UIA_Interface()
-TeamsEl := UIA.ElementFromHandle(WinId)
+WinActivate, ahk_id %curWinId%
 
-;El :=  TeamsEl.FindFirstByNameAndType("Turn camera on", "button",,1)
-El :=  TeamsEl.FindFirstByName("Camera",,1) ; menu item on meeting window; button on Call in progress
-;El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
-If El {
-    If (State = 0) {
-        Tooltip("Teams Camera is already off.")
-        return
-    } Else {
-        Tooltip("Teams Camera On...")
-        El.Click()
-        WinActivate, ahk_id %curWinId%
-        return
-    }
-}
-;El :=  TeamsEl.FindFirstByNameAndType("Turn camera off", "button",,1)
-;El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
-El :=  TeamsEl.FindFirstByName("Camera",,1)
-If El {
-    If (State = 1) {
-        Tooltip("Teams Camera is already on.")
-        return
-    } Else {
-        Tooltip("Teams Camera off...")
-        El.Click()
-        WinActivate, ahk_id %curWinId%
-        return
-    }
-}
+; UIA := UIA_Interface()
+; TeamsEl := UIA.ElementFromHandle(WinId)
+
+; El :=  TeamsEl.FindFirstByNameAndType("Camera", "button",,3)
+; El :=  TeamsEl.FindFirstByName("Camera",,3) ; menu item on meeting window; button on Call in progress
+; El1 :=  TeamsEl.FindFirstByName("Raise",,1) ; menu item on meeting window; button on Call in progress
+
+; ;El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
+; If El {
+;     If (State = 0) {
+;         Tooltip("Teams Camera is already off.")
+;         return
+;     } Else {
+;         Tooltip("Teams Camera On...")
+;         El.Click()
+;         WinActivate, ahk_id %curWinId%
+;         return
+;     }
+; }
+; ;El :=  TeamsEl.FindFirstByNameAndType("Turn camera off", "button",,1)
+; ;El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
+; El :=  TeamsEl.FindFirstByName("Camera",,1)
+; If El {
+;     If (State = 1) {
+;         Tooltip("Teams Camera is already on.")
+;         return
+;     } Else {
+;         Tooltip("Teams Camera off...")
+;         El.Click()
+;         WinActivate, ahk_id %curWinId%
+;         return
+;     }
+; }
 
 } ; eofun
 
