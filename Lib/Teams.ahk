@@ -3039,6 +3039,13 @@ If !ReactionEl {
 React:
 ReactionEl.Click()
 
+;Send an escape key to close the menu
+SendInput {Esc}
+
+;Send escape key
+SendInput {Esc}
+
+
 ;WinGetTitle, T, ahk_id %curWinId%
 ;MsgBox % T
 
