@@ -2758,6 +2758,10 @@ If (showTrayTip) {
 
 ; -------------------------------------------------------------------------------------------------------------------
 ; -------------------------------------------------------------------------------------------------------------------
+Teams_ToggleLight()
+{
+    Run, "C:\git\SimpleMQTTClient\bin\Debug\net9.0\SimpleMQTTClient.exe" "pub" "VqKIHR0BXdnFbS/IOdeVOA==" "HmM5HYiWqOOwjDscFjhDgQ==" "homeassistant.local" "homeassistant/customaction/execute" "toggle_light|light.office_fan", , Hide
+}
 
 Teams_IsMuted(hwnd:="") {
 ; IsMuted := Teams_IsMuted(hwnd*)
