@@ -59,7 +59,7 @@ Loop, Parse, ParamList, `,
 Menu, SubMenuSettings, Add, Parameters, :SubMenuParams
 
 
-HotkeyIDList = Launcher,Mute,Video,Mute App,Meeting Share,Raise Hand,Push To Talk,Clear Cache,Activate Meeting Window 
+HotkeyIDList = Launcher,Leave,Mute,Video,Mute App,Meeting Share,Raise Hand,Meeting Reaction Like,Meeting Reaction Applause,Meeting Reaction Love,Meeting Reaction Laugh,Meeting Reaction Surprised,Push To Talk,Clear Cache,Activate Meeting Window,Toggle Light 
 MeetingToggleList = Mute,Video,Mute App,Share,Raise Hand,Push To Talk
 
 ; Hotkeys: Activate, Meeting Action Menus and Settings Menus

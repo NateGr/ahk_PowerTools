@@ -2298,10 +2298,10 @@ Teams_MeetingShare(ShareMode := 2){
     ; ShareMode = 1 : share
     ; ShareMode = 2: toggle share
 
-    If GetKeyState("Ctrl") {
-        Teamsy_Help("sh")
-        return
-    }
+;    If GetKeyState("Ctrl") {
+;        Teamsy_Help("sh")
+;        return
+;    }
     WinId := Teams_GetMeetingWindow()
     If !WinId ; empty
         return
@@ -2344,12 +2344,13 @@ Teams_MeetingShare(ShareMode := 2){
         El.Click()
     }
 
+    ; SendInput {Tab}{Tab}{Tab}{Enter} ; Select first screen - New Share design requires 3 {Tab}
     SendInput {Tab}{Tab}{Tab}{Enter} ; Select first screen - New Share design requires 3 {Tab}
     
     ; Move Meeting Window to secondary screen
     SysGet, MonitorCount, MonitorCount	; or try:    SysGet, var, 80
     If (MonitorCount > 1) {
-       ; Wait for Window to be minimized
+    ;    Wait for Window to be minimized
        Sleep 500
         ; Move to secondary monitor (activates window)
         Monitor_MoveToSecondary(WinId,false)   ; bug: unshare on winactivate
@@ -2808,6 +2809,10 @@ If (showTrayTip) {
 
 ; -------------------------------------------------------------------------------------------------------------------
 ; -------------------------------------------------------------------------------------------------------------------
+Teams_ToggleLight()
+{
+    Run, "C:\git\SimpleMQTTClient\bin\Debug\net9.0\SimpleMQTTClient.exe" "pub" "VqKIHR0BXdnFbS/IOdeVOA==" "HmM5HYiWqOOwjDscFjhDgQ==" "homeassistant.local" "homeassistant/custom_action/execute" "toggle_light|light.office_lights", , Hide
+}
 
 Teams_IsMuted(hwnd:="") {
 ; IsMuted := Teams_IsMuted(hwnd*)
@@ -2845,36 +2850,48 @@ If !WinId ; empty
     return
 
 WinGet, curWinId, ID, A
+; Seems all this has broken since Microsoft added the Drop down to the button
+;Simplyfying and just activating the window and sending the keystrokes and then reactivate the old window.
+WinActivate, ahk_id %WinId%
+Sleep, 100
+SendInput ^+o ;toggle video ctrl-shift-o
+Sleep, 100
 
-UIA := UIA_Interface()
-TeamsEl := UIA.ElementFromHandle(WinId)
+WinActivate, ahk_id %curWinId%
 
-;El :=  TeamsEl.FindFirstByNameAndType("Turn camera on", "button",,1)
-El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
-If El {
-    If (State = 0) {
-        Tooltip("Teams Camera is already off.")
-        return
-    } Else {
-        Tooltip("Teams Camera On...")
-        El.Click()
-        WinActivate, ahk_id %curWinId%
-        return
-    }
-}
-;El :=  TeamsEl.FindFirstByNameAndType("Turn camera off", "button",,1)
-El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
-If El {
-    If (State = 1) {
-        Tooltip("Teams Camera is already on.")
-        return
-    } Else {
-        Tooltip("Teams Camera off...")
-        El.Click()
-        WinActivate, ahk_id %curWinId%
-        return
-    }
-}
+; UIA := UIA_Interface()
+; TeamsEl := UIA.ElementFromHandle(WinId)
+
+; El :=  TeamsEl.FindFirstByNameAndType("Camera", "button",,3)
+; El :=  TeamsEl.FindFirstByName("Camera",,3) ; menu item on meeting window; button on Call in progress
+; El1 :=  TeamsEl.FindFirstByName("Raise",,1) ; menu item on meeting window; button on Call in progress
+
+; ;El :=  TeamsEl.FindFirstByName("Turn camera on",,1) ; menu item on meeting window; button on Call in progress
+; If El {
+;     If (State = 0) {
+;         Tooltip("Teams Camera is already off.")
+;         return
+;     } Else {
+;         Tooltip("Teams Camera On...")
+;         El.Click()
+;         WinActivate, ahk_id %curWinId%
+;         return
+;     }
+; }
+; ;El :=  TeamsEl.FindFirstByNameAndType("Turn camera off", "button",,1)
+; ;El :=  TeamsEl.FindFirstByName("Turn camera off",,1)
+; El :=  TeamsEl.FindFirstByName("Camera",,1)
+; If El {
+;     If (State = 1) {
+;         Tooltip("Teams Camera is already on.")
+;         return
+;     } Else {
+;         Tooltip("Teams Camera off...")
+;         El.Click()
+;         WinActivate, ahk_id %curWinId%
+;         return
+;     }
+; }
 
 } ; eofun
 
@@ -3077,6 +3094,13 @@ If !ReactionEl {
 React:
 ReactionEl.Click()
 
+;Send an escape key to close the menu
+SendInput {Esc}
+
+;Send escape key
+SendInput {Esc}
+
+
 ;WinGetTitle, T, ahk_id %curWinId%
 ;MsgBox % T
 
@@ -3087,6 +3111,32 @@ IcoFile := "HBITMAP:*" . Create_mr_%Reaction%_ico()
 TrayIcon(IcoFile,2000)
      
 } ; eofun
+Teams_MeetingReactionLike() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Like")
+} ; eofun    
+Teams_MeetingReactionApplause() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Applause")
+} ; eofun    
+Teams_MeetingReactionLove() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Love")
+} ; eofun    
+Teams_MeetingReactionLaugh() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Laugh")
+} ; eofun    
+Teams_MeetingReactionSurprised() {
+    ; Reaction can be Like | Applause| Love | Laugh | Surprised
+    ; See documentation https://tdalon.blogspot.com/2022/07/ahk-teams-meeting-reactions-uia.html
+    Teams_MeetingReaction("Surprised")
+} ; eofun    
+
 
 ; -------------------------------------------------------------------------------------------------------------------
 
