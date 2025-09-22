@@ -2508,6 +2508,9 @@ Teams_Mute(State := 2,showInfo:=true,restoreWin:=true){ ; @fun_teams_mute@
 ;    1: mute on
 ;    2*: (Default): Toggle mute state
 
+TrayTipAutoHide("Mute",2000,3)
+
+
 WinId := Teams_GetMeetingWindow() 
 If !WinId ; empty
     return
@@ -2948,7 +2951,7 @@ If !WinId ; empty
     return
 WinGet, curWinId, ID, A
 WinActivate, ahk_id %WinId%
-Tooltip("Teams Toggle Raise Hand...") 
+Tooltip("Teams TogglRaise / Lower hand...") 
 SendInput ^+k ; toggle video Ctl+Shift+k
 WinActivate, ahk_id %curWinId%
 } ; eofun
@@ -2970,7 +2973,8 @@ If (restoreWin)
 If (showInfo) {
     displayTime := 2000
 }
-    
+
+
 UIA := UIA_Interface()
 TeamsEl := UIA.ElementFromHandle(WinId)
 
@@ -3449,36 +3453,37 @@ Teams_GetLang() { ; @fun_teams_getlang@
 ; For New Teams: 
 ;           %LOCALAPPDATA%\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\app_settings.json -> language
 ; e.g. "en-us"
-static Lang
-If !(Lang = "")
-    return Lang
+return "en-us"
+; static Lang
+; If !(Lang = "")
+;     return Lang
 
-If Teams_IsNew() {
-    EnvGet, LOCALAPPDATA, LOCALAPPDATA
-    JsonFile := LOCALAPPDATA . "\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\app_settings.json"
-    FileRead, Json, %JsonFile%
-    If ErrorLevel {
-        TrayTip, Error, Reading file %JsonFile%!,,3
-        return
-    }
-    oJson := Jxon_Load(Json)
-    Lang := oJson["language"]
-    If (Lang="")
-        {
+; If Teams_IsNew() {
+;     EnvGet, LOCALAPPDATA, LOCALAPPDATA
+;     JsonFile := LOCALAPPDATA . "\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\app_settings.json"
+;     FileRead, Json, %JsonFile%
+;     If ErrorLevel {
+;         TrayTip, Error, Reading file %JsonFile%!,,3
+;         return
+;     }
+;     oJson := Jxon_Load(Json)
+;     Lang := oJson["language"]
+;     If (Lang="")
+;         {
 
-        }
-    return Lang
-} Else {
-    JsonFile := A_AppData . "\Microsoft\Teams\desktop-config.json"
-    FileRead, Json, %JsonFile%
-    If ErrorLevel {
-        TrayTip, Error, Reading file %JsonFile%!,,3
-        return
-    }
-    oJson := Jxon_Load(Json)
-    Lang := oJson["currentWebLanguage"]
-    return Lang
-}
+;         }
+;     return Lang
+; } Else {
+;     JsonFile := A_AppData . "\Microsoft\Teams\desktop-config.json"
+;     FileRead, Json, %JsonFile%
+;     If ErrorLevel {
+;         TrayTip, Error, Reading file %JsonFile%!,,3
+;         return
+;     }
+;     oJson := Jxon_Load(Json)
+;     Lang := oJson["currentWebLanguage"]
+;     return Lang
+; }
 
 } ; eofun
 

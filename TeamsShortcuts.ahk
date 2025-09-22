@@ -433,9 +433,13 @@ If (hMeetWin)
 Return 
 
 ; ######################################################################
+Teams_RaiseHand:
+Teams_RaiseHand2()
+Return 
+
 Teams_RaiseHandCb:
 SendInput, !{Esc} ; for call from system tray - get active window
-Teams_RaiseHand()
+Teams_RaiseHand2()
 Return 
 
 Teams_ShareCb:
